@@ -563,6 +563,7 @@ public class PosingCapability : ActorCharacterCapability
 
     private static Transform MirrorBoneTransform(Transform transform)
     {
+        // This creates generation loss over multiple uses, as floating point precision errors accumulate.
         var euler = transform.Rotation.ToEuler();
         euler.X = 180 - euler.X;
         euler.Y = -euler.Y;
