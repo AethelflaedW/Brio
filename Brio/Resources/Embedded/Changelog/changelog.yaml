@@ -18,7 +18,7 @@ changelog:
         icon: ""
         items:
           - "Fixed a few issues with flipping a pose, like your butt being inversed!"
-          - "Fixed an Issue with reset bone, not resetting face bones"
+          - "Fixed an issue with reset bone, not resetting face bones"
           - "Advanced Environment widgets are no longer open by default"
           - "Updated Festivals List (Valentione's Day, Heavensturn, Little Ladies Day, Hatching Tide & more, for 2026)"
           - "Updated Supporter list"
@@ -47,7 +47,7 @@ changelog:
         icon: ""
         items:
           - "When moving the face bones with IK on, the face jumps!"
-          - "As workaound move your IK bones before changed any face/head bones!"
+          - "As workaround move your IK bones before changed any face/head bones!"
           - "Pose flipping starts to behave weirdly after you do it about.. 70 times"
           - "Occasionally Brio Keybinds are sent to the game incorrectly"
 
