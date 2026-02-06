@@ -134,7 +134,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                 ImBrio.VerticalPadding(5);
                 didSkyChange |= ImGui.InputUInt("###SkyTextureID"u8, ref env->EnvState.SkyTextureID);
                 ImBrio.AttachToolTip("Sky Texture ID");
-               
+
                 ImBrio.CenterNextElementWithPadding(15);
                 didSkyChange |= ImGui.SliderFloat("###fogSunVisibility"u8, ref env->EnvState.Fog.SunVisibility, 0.0f, 1f);
                 ImBrio.AttachToolTip("Sun Visibility");
@@ -211,7 +211,7 @@ public class SkyEditorWidget(SkyEditorCapability skyEditorCapability) : Widget<S
                     ImGui.OpenPopup("cloud_texture_selector"u8);
                 }
                 ImBrio.AttachToolTip("Click to change Cloud Texture");
-               
+
                 var didSkyChange4 = false;
 
                 using(var popup = ImRaii.Popup("cloud_texture_selector"u8))
