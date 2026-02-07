@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static FFXIVClientStructs.FFXIV.Common.Component.BGCollision.MeshPCB;
 
 namespace Brio.MCDF.Game.Services;
 
@@ -146,12 +147,26 @@ public class MCDFService : IDisposable
             {
                 Guid applicationId = Guid.NewGuid();
 
-                if(LoadedMcdfHeader == null || !LoadedMcdfHeader.IsCompletedSuccessfully) return;
+                if(LoadedMcdfHeader == null)
+                {
+                    logger.Warning("MCDF header not loaded; aborting ApplyMCDF.");
+                    return;
+                }
+
+                if(!LoadedMcdfHeader.IsCompletedSuccessfully)
+                {
+                    logger.Warning("MCDF header task not completed successfully (Status: {Status}); aborting ApplyMCDF.", LoadedMcdfHeader.Status);
+                    return;
+                }
 
                 var playerChar = await _dalamudService.GetPlayerCharacterAsync().ConfigureAwait(false);
                 bool isSelf = playerChar is not null && string.Equals(playerChar.Name.TextValue, name, StringComparison.Ordinal);
 
-                if(isSelf) return;
+                if(isSelf)
+                {
+                    logger.Information("Skipping MCDF apply because target is self.");
+                    return;
+                }
 
                 long expectedExtractedSize = LoadedMcdfHeader.Result.ExpectedLength;
                 var charaFile = LoadedMcdfHeader.Result.LoadedFile;
@@ -175,8 +190,7 @@ public class MCDFService : IDisposable
             }
             catch(Exception ex)
             {
-                logger.Warning(ex, "Failed to extract MCDF");
-                throw;
+                logger.Error(ex, "Failed to extract MCDF");
             }
             finally
             {
@@ -188,8 +202,6 @@ public class MCDFService : IDisposable
                     File.Delete(file);
                 }
             }
-
-            Brio.Log.Information("Finished applying MCDF");
         }));
     }
 
@@ -231,9 +243,13 @@ public class MCDFService : IDisposable
         if(charaFileHeader == null)
             return [];
 
+        logger.Debug("Starting extraction of MCDF file {FileName}, expected size after extraction is {ExpectedLength}", charaFileHeader.FilePath, expectedLength.ToByteString());
+
         using var lz4Stream = new LZ4Stream(File.OpenRead(charaFileHeader.FilePath), LZ4StreamMode.Decompress, LZ4StreamFlags.HighCompression);
         using var reader = new BinaryReader(lz4Stream);
         MareCharaFileHeader.AdvanceReaderToData(reader);
+     
+        logger.Debug("Finished Advancing MCDF header, starting to read file data");
 
         long totalRead = 0;
         Dictionary<string, string> gamePathToFilePath = new(StringComparer.Ordinal);
@@ -317,6 +333,11 @@ public class MCDFService : IDisposable
             }
 
             _characterHandlerService.CharacterHandler.Add(new CharacterHolder(tempHandler.GameObject, cPlusId, tempHandler.Name));
+        }
+        catch(Exception ex)
+        {
+            logger.Error(ex, "Failed to apply MCDF data");
+            throw;
         }
         finally
         {
