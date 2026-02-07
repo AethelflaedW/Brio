@@ -17,11 +17,11 @@ changelog:
       - number: "0.7.1.2"
         icon: ""
         items:
-          - "Fixed a few issues with flipping a pose, like your butt being inversed!"
-          - "Fixed an issue with reset bone, not resetting face bones"
-          - "Advanced Environment widgets are no longer open by default"
-          - "Updated Festivals List (Valentione's Day, Heavensturn, Little Ladies Day, Hatching Tide & more, for 2026)"
-          - "Updated Supporter list"
+          - "Fix spawning of actors with a CompanionSlot, Spawning at GPose origin"
+          - "Attempted to make props more stable"
+          - "Tags now properly work for .pose files (didn't know they could even have tags did you?')"
+          - "Made more improvements to pose mirroring (like fixing more hair things)"
+          - "Fixed some typos"
  
       - number: "0.7.1.1"
         icon: ""
