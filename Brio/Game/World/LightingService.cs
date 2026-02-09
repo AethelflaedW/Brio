@@ -230,7 +230,7 @@ public unsafe class LightingService : IDisposable
             if(_virtualCameraManager.CurrentCamera.IsFreeCamera)
             {
                 light->Transform.Position = _virtualCameraManager.CurrentCamera.Position;
-                light->Transform.Rotation = _virtualCameraManager.CurrentCamera.Rotation.ToEulerAngles();
+                light->Transform.Rotation = _virtualCameraManager.CurrentCamera.FreeCameraRotationAsQuaternion;
             }
             else
             {
